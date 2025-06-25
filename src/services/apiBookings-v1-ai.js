@@ -22,13 +22,102 @@ export async function getBookings({ filter, sortBy, page }) {
 	}
 
 	let { data, error, count } = await query;
+	console.log(data);
+	while (!data?.length && from >= 10) {
+		console.log("page started");
+		from -= PAGE_SIZE;
+		to -= PAGE_SIZE;
 
+		let query = supabase
+			.from("bookings")
+			.select("*, cabins(name), guests(fullName, email)", { count: "exact" });
+
+		if (filter)
+			query = query[filter.method || "eq"](filter.field, filter.value);
+		if (sortBy)
+			query = query.order(sortBy.sortby, {
+				ascending: sortBy.direction === "asc",
+			});
+		// from = from > PAGE_SIZE ? from - PAGE_SIZE : from;
+		// to = to > PAGE_SIZE ? to - PAGE_SIZE : to;
+		({ data, error, count } = await query.range(from, to));
+	}
+	console.log(error, data);
 	if (error) {
 		console.log(error);
 		throw new Error("Could not load cabins");
 	}
 	return { data, count };
 }
+
+// export async function getBookings({ filter, sortBy, page }) {
+// 	// 1) Initialize the base query builder
+// 	let queryBuilder = supabase
+// 		.from("bookings")
+// 		.select("*, cabins(name), guests(fullName, email)", { count: "exact" });
+
+// 	// 2) Apply filtering if specified
+// 	if (filter) {
+// 		queryBuilder = queryBuilder[filter.method || "eq"](
+// 			filter.field,
+// 			filter.value
+// 		);
+// 	}
+
+// 	// 3) Apply sorting if specified
+// 	if (sortBy) {
+// 		queryBuilder = queryBuilder.order(sortBy.sortby, {
+// 			ascending: sortBy.direction === "asc",
+// 		});
+// 	}
+
+// 	// 4) Calculate initial pagination range
+// 	let from = PAGE_SIZE * (page - 1); // 0, 10, 20...
+// 	let to = PAGE_SIZE + from - 1; // 9, 19, 29...
+
+// 	// 5) First execution with pagination
+// 	let { data, error, count } = await queryBuilder.range(from, to);
+
+// 	// 6) Fallback mechanism
+// 	while (!data?.length && from >= 10) {
+// 		console.log("Fetching previous page...", { from, to });
+
+// 		// Adjust range safely
+// 		from = from - PAGE_SIZE;
+// 		to = from + PAGE_SIZE - 1;
+
+// 		// Recreate the query with all filters/sort and new range
+// 		let fallbackQuery = supabase
+// 			.from("bookings")
+// 			.select("*, cabins(name), guests(fullName, email)", { count: "exact" });
+
+// 		// Reapply filters
+// 		if (filter) {
+// 			fallbackQuery = fallbackQuery[filter.method || "eq"](
+// 				filter.field,
+// 				filter.value
+// 			);
+// 		}
+
+// 		// Reapply sorting
+// 		if (sortBy) {
+// 			fallbackQuery = fallbackQuery.order(sortBy.sortby, {
+// 				ascending: sortBy.direction === "asc",
+// 			});
+// 		}
+
+// 		// Execute with new range
+// 		({ data, error, count } = await fallbackQuery.range(from, to));
+// 	}
+
+// 	// 7) Error handling
+// 	if (error) {
+// 		console.error("Database error:", error);
+// 		throw new Error("Could not load bookings");
+// 	}
+
+// 	return { data, count };
+// }
 
 export async function getBooking(id) {
 	const { data, error } = await supabase
@@ -42,7 +131,7 @@ export async function getBooking(id) {
 		throw new Error("Booking not found");
 	}
 
-	return data;
+	return { data };
 }
 
 // Returns all BOOKINGS that are were created after the given date. Useful to get bookings created in the last 30 days, for example.

@@ -71,7 +71,6 @@ function Option({ children, value }) {
 		onClick: () => {
 			open(value);
 			console.log(value);
-			console.log("cloned");
 		},
 	});
 }

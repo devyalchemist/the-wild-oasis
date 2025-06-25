@@ -24,5 +24,12 @@ const Heading = styled.h1`
 			font-size: 20px;
 			font-weight: 400;
 		`}
+	${(s) =>
+		s.as === "h4" &&
+		css`
+			font-size: 3rem;
+			font-weight: 600;
+			text-align: center;
+		`}
 `;
 export default Heading;

@@ -80,9 +80,7 @@ export default function Pagination({ count }) {
 			<P>
 				Showing <span>{(currentPage - 1) * PAGE_SIZE + 1}</span> to{" "}
 				<span>
-					{currentPage !== pageCount
-						? currentPage * PAGE_SIZE
-						: (currentPage - 1) * PAGE_SIZE + (count % PAGE_SIZE)}
+					{currentPage !== pageCount ? currentPage * PAGE_SIZE : count}
 				</span>{" "}
 				of <span>{count}</span> results
 			</P>

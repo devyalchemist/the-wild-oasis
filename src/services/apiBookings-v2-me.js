@@ -22,7 +22,27 @@ export async function getBookings({ filter, sortBy, page }) {
 	}
 
 	let { data, error, count } = await query;
+	console.log(data);
+	while (!data?.length && from >= 10) {
+		console.log("page started");
+		from -= PAGE_SIZE;
+		to -= PAGE_SIZE;
 
+		let query = supabase
+			.from("bookings")
+			.select("*, cabins(name), guests(fullName, email)", { count: "exact" });
+
+		if (filter)
+			query = query[filter.method || "eq"](filter.field, filter.value);
+		if (sortBy)
+			query = query.order(sortBy.sortby, {
+				ascending: sortBy.direction === "asc",
+			});
+		// from = from > PAGE_SIZE ? from - PAGE_SIZE : from;
+		// to = to > PAGE_SIZE ? to - PAGE_SIZE : to;
+		({ data, error, count } = await query.range(from, to));
+	}
+	console.log(error, data);
 	if (error) {
 		console.log(error);
 		throw new Error("Could not load cabins");
