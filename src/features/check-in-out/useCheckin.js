@@ -12,7 +12,8 @@ export function useCheckin() {
 		onSuccess: (data) => {
 			toast.success(`Booking #${data.id}`);
 			queryClient.invalidateQueries({
-				queryKey: ["booking"],
+				// queryKey: ["booking"],
+				predicate: (query) => query.queryKey[0] === "bookings",
 			});
 			navigate(`/`);
 		},

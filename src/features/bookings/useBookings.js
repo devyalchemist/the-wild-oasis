@@ -27,25 +27,19 @@ export function useBookings() {
 		data: { data: bookings, count } = {},
 		error,
 	} = useQuery({
-		queryFn: () => {
-			return getBookings({ filter, sortBy, page });
-		},
+		queryFn: () => getBookings({ filter, sortBy, page }),
 		queryKey: ["bookings", filter, sortBy, page],
 	});
 
 	// Pre-fetching
 	if (page < Math.ceil(count / PAGE_SIZE))
 		queryClient.prefetchQuery({
-			queryFn: () => {
-				return getBookings({ filter, sortBy, page: page + 1 });
-			},
+			queryFn: () => getBookings({ filter, sortBy, page: page + 1 }),
 			queryKey: ["bookings", filter, sortBy, page + 1],
 		});
 	if (page > 1)
 		queryClient.prefetchQuery({
-			queryFn: () => {
-				return getBookings({ filter, sortBy, page: page - 1 });
-			},
+			queryFn: () => getBookings({ filter, sortBy, page: page - 1 }),
 			queryKey: ["bookings", filter, sortBy, page - 1],
 		});
 

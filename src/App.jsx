@@ -15,6 +15,7 @@ import { Toaster } from "react-hot-toast";
 import Booking from "./pages/Booking";
 import Checkin from "./pages/Checkin";
 import ProtectedRoute from "./ui/ProtectedRoute";
+import ToggleProvider from "./context/ToggleProvider";
 
 const queryClient = new QueryClient({
 	defaultOptions: {

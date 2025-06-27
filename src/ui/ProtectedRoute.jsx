@@ -3,6 +3,7 @@ import { useUser } from "../features/authentication/useUser";
 import Spinner from "./Spinner";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const FullPage = styled.div`
 	height: 100dvh;
@@ -12,6 +13,7 @@ const FullPage = styled.div`
 	justify-content: center;
 `;
 export default function ProtectedRoute({ children }) {
+	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	//1) we need to load the authenticated user
 
@@ -21,7 +23,8 @@ export default function ProtectedRoute({ children }) {
 	useEffect(() => {
 		if (!isAuthenticated && !isLoadingUser) {
 			// this line makes sure that the it check if the user is authenticated only when it is no longer loading ie , the full user data has been fetched
-			navigate("/login");
+			queryClient.removeQueries();
+			navigate("/login", { replace: true });
 		}
 	}, [isAuthenticated, isLoadingUser, navigate]);
 	//2) while loading show the spinner

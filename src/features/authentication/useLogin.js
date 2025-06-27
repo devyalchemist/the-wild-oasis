@@ -11,7 +11,8 @@ export function useLogin() {
 		onSuccess: (user) => {
 			console.log(user);
 			toast.success("Login successful");
-			queryClient.invalidateQueries({ queryKey: ["user"] });
+			queryClient.setQueryData(["user"], user.user);
+			// queryClient.invalidateQueries({ queryKey: ["user"] });
 			navigate("/dashboard");
 		},
 		onError: (error) => {
