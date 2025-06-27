@@ -7,7 +7,12 @@ const Main = styled.main`
 	background-color: var(--color-grey-50);
 	padding: 4rem 4.8rem 6.4rem;
 	//I added the line below to enable scroll for the main section children alone.
-	overflow: scroll;
+	overflow: auto;
+	/* overflow-y: scroll;
+	overflow-x: auto; */
+	&::-webkit-scrollbar:horizontal {
+		display: none;
+	}
 `;
 const StyledAppLayout = styled.div`
 	display: grid;
