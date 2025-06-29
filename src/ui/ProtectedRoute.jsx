@@ -17,7 +17,7 @@ export default function ProtectedRoute({ children }) {
 	const navigate = useNavigate();
 	//1) we need to load the authenticated user
 
-	const { user, isLoadingUser, isAuthenticated } = useUser();
+	const { isLoadingUser, isAuthenticated } = useUser();
 
 	//3) if there is no authenticated user, redirect to the /login route
 	useEffect(() => {
@@ -26,7 +26,7 @@ export default function ProtectedRoute({ children }) {
 			queryClient.removeQueries();
 			navigate("/login", { replace: true });
 		}
-	}, [isAuthenticated, isLoadingUser, navigate]);
+	}, [isAuthenticated, isLoadingUser, queryClient, navigate]);
 	//2) while loading show the spinner
 	if (isLoadingUser)
 		return (

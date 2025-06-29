@@ -3,9 +3,9 @@ import Logout from "../features/authentication/Logout";
 import ButtonIcon from "./ButtonIcon";
 import { HiOutlineUser } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef } from "react";
 import DarkModeToggle from "./DarkModeToggle";
 import { useToggle } from "../context/ToggleProvider";
+import { useEffect } from "react";
 
 const StyledHeaderMenu = styled.ul`
 	display: flex;
@@ -13,16 +13,9 @@ const StyledHeaderMenu = styled.ul`
 `;
 
 export default function HeaderMenu() {
-	const ref = useRef(null);
+	// const ref = useRef(null);
 	const { setIsDark, isDark } = useToggle();
-
 	useEffect(() => {
-		function toggleTheme(e) {
-			if (e.target === ref.current) {
-				console.log("clicked");
-				setIsDark((prev) => !prev);
-			}
-		}
 		if (isDark) {
 			document.getElementById("html").classList.remove("light-mode");
 			document.getElementById("html").classList.add("dark-mode");
@@ -30,9 +23,8 @@ export default function HeaderMenu() {
 			document.getElementById("html").classList.remove("dark-mode");
 			document.getElementById("html").classList.add("light-mode");
 		}
-		document.addEventListener("click", toggleTheme);
-		return () => document.removeEventListener("click", toggleTheme);
-	}, [setIsDark, isDark]);
+	}, [isDark]);
+
 	const navigate = useNavigate();
 	return (
 		<StyledHeaderMenu>
@@ -45,7 +37,7 @@ export default function HeaderMenu() {
 				<Logout />
 			</li>
 			<li>
-				<DarkModeToggle ref={ref} />
+				<DarkModeToggle handleChange={() => setIsDark((prev) => !prev)} />
 			</li>
 		</StyledHeaderMenu>
 	);

@@ -1,10 +1,13 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 import { useLocalStorageState } from "../hooks/useLocalStorageState";
 
 const toggleContext = createContext();
 
 export default function ToggleProvider({ children }) {
-	const [isDark, setIsDark] = useLocalStorageState(false, "isDark");
+	const [isDark, setIsDark] = useLocalStorageState(
+		window.matchMedia("(prefers-color-scheme: dark)").matches,
+		"isDark"
+	);
 
 	return (
 		<toggleContext.Provider value={{ isDark, setIsDark }}>

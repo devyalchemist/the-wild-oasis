@@ -4,12 +4,11 @@ import Form from "../../ui/Form";
 import Input from "../../ui/Input";
 import FormRowVertical from "../../ui/FormRowVertical";
 import { useLogin } from "./useLogin";
-import Spinner from "../../ui/Spinner";
 import SpinnerMini from "../../ui/SpinnerMini";
 
 function LoginForm() {
-	const [email, setEmail] = useState("gospelugwuja2@gmail.com");
-	const [password, setPassword] = useState("Password?123");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 	const { login, isPending } = useLogin();
 
 	function handleSubmit(e) {

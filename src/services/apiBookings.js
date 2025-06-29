@@ -68,7 +68,7 @@ export async function getStaysAfterDate(date) {
 		// .select('*')
 		.select("*, guests(fullName)")
 		.gte("startDate", date)
-		.lte("startDate", getToday());
+		.lte("startDate", getToday()); // changed to getTodayAny
 
 	if (error) {
 		console.error(error);
@@ -84,7 +84,17 @@ export async function getStaysTodayActivity() {
 		.from("bookings")
 		.select("*, guests(fullName, nationality, countryFlag)")
 		.or(
-			`and(status.eq.unconfirmed,startDate.eq.${getToday()}),and(status.eq.checked-in,endDate.eq.${getToday()})`
+			// `and(status.eq.unconfirmed,startDate.eq.${getTodayAny()}),and(status.eq.checked-in,endDate.eq.${getTodayAny()})` // here is changed the getToday to getTodayAny
+			// `and(status.eq.unconfirmed,startDate.lte.${getTodayAny()}),and(status.eq.checked-in,endDate.gte.${getTodayAny()})` // this would not be adequate since some bookings can be placed for the future, so this will not be fulfilled.
+
+			// this also is a very strict selection since ppl may not book within the range.
+			// `and(status.eq.unconfirmed,startDate.gte.${getToday()},endDate.lte.${getToday(
+			// 	{ end: true }
+			// )}),and(status.eq.checked-in,startDate.gte.${getToday()},endDate.lte.${getToday(
+			// 	{ end: true }
+			// )})`
+
+			`and(status.eq.unconfirmed,startDate.gte.${getToday()}),and(status.eq.checked-in,startDate.gte.${getToday()})`
 		)
 		.order("created_at");
 

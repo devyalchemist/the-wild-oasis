@@ -12,8 +12,9 @@ export function useCheckin() {
 		onSuccess: (data) => {
 			toast.success(`Booking #${data.id}`);
 			queryClient.invalidateQueries({
-				// queryKey: ["booking"],
-				predicate: (query) => query.queryKey[0] === "bookings",
+				predicate: (query) =>
+					query.queryKey[0] === "bookings" ||
+					query.queryKey[0] === "today-activity", // added this line to invalidate the display for the today activity displayed on the dashboard page
 			});
 			navigate(`/`);
 		},

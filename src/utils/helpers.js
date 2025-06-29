@@ -22,6 +22,10 @@ export const getToday = function (options = {}) {
 	else today.setUTCHours(0, 0, 0, 0);
 	return today.toISOString();
 };
+export function getTodayAny() {
+	const today = new Date();
+	return today.toISOString();
+}
 
 export const formatCurrency = (value) =>
 	new Intl.NumberFormat("en", { style: "currency", currency: "USD" }).format(

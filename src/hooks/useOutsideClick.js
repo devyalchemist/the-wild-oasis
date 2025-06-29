@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export function useOutsideClick(callback) {
+export function useOutsideClick(callback, listenCapturing = true) {
 	const modal = useRef(null);
 	useEffect(() => {
 		function handleClick(e) {
@@ -8,9 +8,10 @@ export function useOutsideClick(callback) {
 				callback();
 			}
 		}
-		document.addEventListener("click", handleClick, true);
-		return () => document.removeEventListener("click", handleClick, true);
-	}, [callback]);
+		document.addEventListener("click", handleClick, listenCapturing);
+		return () =>
+			document.removeEventListener("click", handleClick, listenCapturing);
+	}, [callback, listenCapturing]);
 
 	return { modal };
 }

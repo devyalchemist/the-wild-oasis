@@ -5,7 +5,6 @@ import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import { useSignupForm } from "./useSignupForm";
 
-import { useNavigate } from "react-router-dom";
 // Email regex: /\S+@\S+\.\S+/
 
 function SignupForm() {

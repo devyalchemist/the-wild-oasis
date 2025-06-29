@@ -17,7 +17,6 @@ function Logo() {
 		<StyledLogo>
 			<Img src={src} alt="Logo" />
 		</StyledLogo>
-	
 	);
 }
 

@@ -13,12 +13,8 @@ import Spinner from "../../ui/Spinner";
 import { useEffect, useState } from "react";
 import Checkbox from "../../ui/Checkbox";
 import { formatCurrency } from "../../utils/helpers";
-import { updateBooking } from "../../services/apiBookings";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+
 import { useCheckin } from "./useCheckin";
-import { id } from "date-fns/locale";
 import { useSetting } from "../settings/useSetting";
 
 const Box = styled.div`
@@ -42,14 +38,7 @@ function CheckinBooking() {
 	}, [booking?.isPaid]);
 	if (isLoading || isLoadingSetting) return <Spinner />;
 	const optionalBreakFastPrice = settings.breakfastPrice;
-	const {
-		id: bookingId,
-		guests,
-		totalPrice,
-		numGuests,
-		hasBreakfast,
-		numNights,
-	} = booking;
+	const { id: bookingId, guests, totalPrice, hasBreakfast } = booking;
 
 	function handleCheckin() {
 		if (!confirmedPaid) return;
